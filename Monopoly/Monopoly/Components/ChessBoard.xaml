@@ -1,0 +1,771 @@
+﻿<UserControl x:Class="Monopoly.Components.ChessBoard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.Components"
+             xmlns:compoenent="clr-namespace:Monopoly.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="760" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0"/>
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="275,-175,275,35" To="275,173,275,377" DecelerationRatio="0.9" Duration="0:0:1"/>
+            <DoubleAnimation BeginTime="0:0:1.5" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1.0"/>
+            <ThicknessAnimation BeginTime="0:0:3" Storyboard.TargetProperty="Margin" From="275,173,275,377" To="275,-175,275,35" DecelerationRatio="0.9" Duration="0:0:1"/>
+        </Storyboard>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" SnapsToDevicePixels="true" StrokeThickness="1" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonSetting" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Button.Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="100" RenderingBias="Performance" Opacity="1" ShadowDepth ="0" Color ="White"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="nen" Width="1280" Height="760">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="700"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.RowSpan="3" Grid.ColumnSpan="5" 
+               Source="/Monopoly;component/Images/background/bg.jpg"
+               Stretch="UniformToFill"/>
+        <Canvas x:Name="Bor_SideBar"
+            Grid.Row="1"
+            Grid.Column="1">
+            <compoenent:SideBar x:Name="sideBar"/>
+        </Canvas>
+        
+        <Button Style="{DynamicResource ButtonSetting}" x:Name="btnSetting"
+                Grid.Column="4"
+                Grid.Row="1"
+                Width="40"
+                Height="40" 
+                BorderThickness="0"
+                Margin="10,5,10,655"
+                Click="Setting_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/Monopoly;component/Images/Setting/settings.png"/>
+
+            </Button.Background>
+        </Button>
+        
+        <Canvas x:Name="Can_BanCo"  Width="auto" Height="auto" Grid.Column="3" Grid.Row ="1" Background="Transparent" >
+
+            <Grid x:Name="BanCo" Width="700" Height="700" Grid.Column="3" Grid.Row ="1" >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="_10" 
+                            Grid.Row="0" 
+                            Grid.Column="0"
+                            Height="80" 
+                            Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+                            
+                    <compoenent:ContentChessCell 
+                            x:Name="o10"
+                            Opacity = "0.8" 
+                            ImageCell="/Monopoly;component/Images/SpecialCell/InPrison.jpg"
+                            />
+                </Border>
+
+                <Border x:Name="_9" 
+                        Grid.Row="1" 
+                        Grid.Column="0" 
+                        MouseEnter="_9_MouseEnter" 
+                        MouseLeave="_9_MouseLeave" 
+                        Height="60" Width="80" 
+                        BorderThickness="1" 
+                        CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                        
+                            ImageCell="/Monopoly;component/Images/planet/planet7.jpg"
+                            />
+                </Border>
+
+                <Border x:Name="_8" 
+                        Grid.Row="2" 
+                        Grid.Column="0"
+                        MouseEnter="_8_MouseEnter" 
+                        MouseLeave="_8_MouseLeave" 
+                        Height="60" Width="80" 
+                        BorderThickness="1" 
+                        CornerRadius="5">
+                    <compoenent:ContentChessCell
+                        Opacity = "0.75"  
+                        ImageCell="/Monopoly;component/Images/planet/planet6.jpg"
+                        />
+                </Border>
+
+                <Border x:Name="_7"
+                        Grid.Row="3" 
+                        Grid.Column="0" 
+                        MouseEnter="_7_MouseEnter" 
+                        MouseLeave="_7_MouseLeave" 
+                        Height="60" Width="80"
+                        BorderThickness="1" 
+                        CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Chance.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_6"
+                             Grid.Row="4" 
+                             Grid.Column="0" 
+                             MouseEnter="_6_MouseEnter" 
+                             MouseLeave="_6_MouseLeave"  
+                             Height="60" Width="80"
+                             BorderThickness="1"
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet5.jpg"
+                            />
+                </Border>
+                <Border x:Name="_5" 
+                            Grid.Row="5" 
+                            Grid.Column="0"
+                            MouseEnter="_5_MouseEnter"
+                            MouseLeave="_5_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet4.jpg"
+                            />
+                </Border>
+                <Border x:Name="_4" 
+                            Grid.Row="6"
+                            Grid.Column="0" 
+                            MouseEnter="_4_MouseEnter"
+                            MouseLeave="_4_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet3.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_3"
+                             Grid.Row="7"
+                             Grid.Column="0" 
+                             MouseEnter="_3_MouseEnter"
+                             MouseLeave="_3_MouseLeave"
+                             Height="60" Width="80" 
+                             BorderThickness="1"
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Tax.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_2" 
+                             Grid.Row="8" 
+                             Grid.Column="0" 
+                             MouseEnter="_2_MouseEnter" 
+                             MouseLeave="_2_MouseLeave" 
+                             Height="60" Width="80" 
+                             BorderThickness="1"
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet2.jpg"
+                            />
+                </Border>
+                <Border x:Name="_1"
+                            Grid.Row="9"
+                            Grid.Column="0" 
+                            MouseEnter="_1_MouseEnter" 
+                            MouseLeave="_1_MouseLeave"
+                            Height="60" Width="80"
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet1.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_0" 
+                             Grid.Row="10"
+                             Grid.Column="0" 
+                             Height="80"
+                             Width="80"
+                             BorderThickness="1"
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Start.jpg"
+                            />
+                </Border>
+                <Border x:Name="_11" 
+                            Grid.Row="0" 
+                            Grid.Column="1" 
+                            MouseEnter="_11_MouseEnter"
+                            MouseLeave="_11_MouseLeave"  
+                            Height="80" Width="60" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet8.jpg"
+                            />
+                </Border>
+                <Border x:Name="_12" 
+                            Grid.Row="0" 
+                            Grid.Column="2"
+                            MouseEnter="_12_MouseEnter" 
+                            MouseLeave="_12_MouseLeave" 
+                            Height="80" Width="60"
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet9.jpg"
+                            />
+                </Border>
+                <Border x:Name="_13" 
+                            Grid.Row="0"
+                            Grid.Column="3" 
+                            MouseEnter="_13_MouseEnter" 
+                            MouseLeave="_13_MouseLeave" 
+                            Height="80" Width="60"
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/CommunityChest.jpg" 
+                            />
+                </Border>
+                <Border x:Name="_14" 
+                            Grid.Row="0" 
+                            Grid.Column="4" 
+                            MouseEnter="_14_MouseEnter" 
+                            MouseLeave="_14_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet10.jpg" 
+                            />
+                </Border>
+                <Border x:Name="_15"
+                            Grid.Row="0" 
+                            Grid.Column="5" 
+                            MouseEnter="_15_MouseEnter"
+                            MouseLeave="_15_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet11.jpg" 
+                            />
+                </Border>
+                <Border x:Name="_16" 
+                            Grid.Row="0" 
+                            Grid.Column="6" 
+                            MouseEnter="_16_MouseEnter"
+                            MouseLeave="_16_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet12.png"
+                            />
+                </Border>
+                <Border x:Name="_17" 
+                            Grid.Row="0"
+                            Grid.Column="7" 
+                            MouseEnter="_17_MouseEnter" 
+                            MouseLeave="_17_MouseLeave" 
+                            Height="80"
+                            Width="60" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Power.jpg"
+                            />
+                </Border>
+                <Border x:Name="_18" 
+                            Grid.Row="0"
+                            Grid.Column="8"
+                            MouseEnter="_18_MouseEnter"
+                            MouseLeave="_18_MouseLeave" 
+                            Height="80" Width="60"
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet13.jpg" 
+                            />
+                </Border>
+                <Border x:Name="_19" 
+                            Grid.Row="0" 
+                            Grid.Column="9" 
+                            MouseEnter="_19_MouseEnter" 
+                            MouseLeave="_19_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet14.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_20" 
+                             Grid.Row="0" 
+                             Grid.Column="10"
+                             Height="80" Width="80" 
+                             BorderThickness="1"
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/ParkingLot.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_39" 
+                             Grid.Row="10"
+                             Grid.Column="1" 
+                             MouseEnter="_39_MouseEnter" 
+                             MouseLeave="_39_MouseLeave" 
+                             Height="80"
+                             Width="60"
+                             BorderThickness="1" 
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet28.jpg"
+                            />
+                </Border>
+                <Border x:Name="_38" 
+                            Grid.Row="10" 
+                            Grid.Column="2" 
+                            MouseEnter="_38_MouseEnter" 
+                            MouseLeave="_38_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet27.jpg"
+                            />
+                </Border>
+                <Border  x:Name="_37" 
+                             Grid.Row="10" 
+                             Grid.Column="3" 
+                             MouseEnter="_37_MouseEnter" 
+                             MouseLeave="_37_MouseLeave" 
+                             Height="80" Width="60" 
+                             BorderThickness="1" 
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Tax.jpg"
+                            />
+                </Border>
+                <Border x:Name="_36"
+                            Grid.Row="10" 
+                            Grid.Column="4"
+                            MouseEnter="_36_MouseEnter" 
+                            MouseLeave="_36_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet26.jpg"
+                            />
+                </Border>
+                <Border x:Name="_35"
+                            Grid.Row="10" 
+                            Grid.Column="5" 
+                            MouseEnter="_35_MouseEnter"
+                            MouseLeave="_35_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet25.jpg"
+                            />
+                </Border>
+                <Border x:Name="_34" 
+                            Grid.Row="10" 
+                            Grid.Column="6" 
+                            MouseEnter="_34_MouseEnter" 
+                            MouseLeave="_34_MouseLeave"   
+                            Height="80" Width="60" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet24.jpg" 
+                            />
+                </Border>
+                <Border  x:Name="_33"
+                             Grid.Row="10" 
+                             Grid.Column="7" 
+                             MouseEnter="_33_MouseEnter" 
+                             MouseLeave="_33_MouseLeave"
+                             Height="80" Width="60" 
+                             BorderThickness="1" 
+                             CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Power.jpg" 
+                            />
+                </Border>
+                <Border x:Name="_32"
+                            Grid.Row="10" 
+                            Grid.Column="8"
+                            MouseEnter="_32_MouseEnter" 
+                            MouseLeave="_32_MouseLeave" 
+                            Height="80" Width="60"
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet23.jpg"
+                            />
+                </Border>
+                <Border x:Name="_31" 
+                            Grid.Row="10"
+                            Grid.Column="9" 
+                            MouseEnter="_31_MouseEnter" 
+                            MouseLeave="_31_MouseLeave" 
+                            Height="80" Width="60" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet22.jpg"
+                            />
+                </Border>
+                <Border x:Name="_30" 
+                            Grid.Row="10"
+                            Grid.Column="10" 
+                            Height="80" 
+                            Width="80"
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/GotoPrison.jpg"
+                            />
+                </Border>
+                <Border x:Name="_21"
+                            Grid.Row="1" 
+                            Grid.Column="10" 
+                            MouseEnter="_21_MouseEnter" 
+                            MouseLeave="_21_MouseLeave"  
+                            Height="60" Width="80" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet15.jpg"
+                            />
+                </Border>
+                <Border x:Name="_22" 
+                            Grid.Row="2" 
+                            Grid.Column="10" 
+                            MouseEnter="_22_MouseEnter" 
+                            MouseLeave="_22_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet16.jpg"
+                            />
+                </Border>
+                <Border x:Name="_23" 
+                            Grid.Row="3" 
+                            Grid.Column="10" 
+                            MouseEnter="_23_MouseEnter"
+                            MouseLeave="_23_MouseLeave"  
+                            Height="60" Width="80"
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/Chance.jpg"
+                            />
+                </Border>
+                <Border x:Name="_24"
+                            Grid.Row="4" 
+                            Grid.Column="10"
+                            MouseEnter="_24_MouseEnter"
+                            MouseLeave="_24_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet17.jpg"
+                            />
+                </Border>
+                <Border x:Name="_25" 
+                            Grid.Row="5" 
+                            Grid.Column="10"
+                            MouseEnter="_25_MouseEnter" 
+                            MouseLeave="_25_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet18.jpg"
+                            />
+                </Border>
+                <Border x:Name="_26" 
+                            Grid.Row="6" 
+                            Grid.Column="10" 
+                            MouseEnter="_26_MouseEnter" 
+                            MouseLeave="_26_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1"
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet19.jpg"
+                            />
+                </Border>
+                <Border x:Name="_27" 
+                            Grid.Row="7" 
+                            Grid.Column="10" 
+                            MouseEnter="_27_MouseEnter" 
+                            MouseLeave="_27_MouseLeave"  
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.8"  
+                            ImageCell="/Monopoly;component/Images/SpecialCell/CommunityChest.jpg"
+                            />
+                </Border>
+                <Border x:Name="_28" 
+                            Grid.Row="8" 
+                            Grid.Column="10" 
+                            MouseEnter="_28_MouseEnter" 
+                            MouseLeave="_28_MouseLeave" 
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet20.jpg"
+                            />
+                </Border>
+                <Border x:Name="_29" 
+                            Grid.Row="9" 
+                            Grid.Column="10" 
+                            MouseEnter="_29_MouseEnter"
+                            MouseLeave="_29_MouseLeave"  
+                            Height="60" Width="80" 
+                            BorderThickness="1" 
+                            CornerRadius="5">
+
+                    <compoenent:ContentChessCell 
+                            Opacity = "0.75"  
+                            ImageCell="/Monopoly;component/Images/planet/planet21.jpg"
+                            />
+                </Border>
+
+                <!-- Vùng hiển thị các view -->
+                <Grid Grid.RowSpan="9" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="9" Width="540">
+                    <ContentControl x:Name="centerMapView"
+                                    Width="500"
+                                    Height="500"/>
+                </Grid>
+                <!--add the popupTop user control-->
+
+                <Popup x:Name="popup_top"
+               AllowsTransparency="True"
+               HorizontalOffset="-130"
+               VerticalOffset="85" >
+                    <Grid>
+                        <compoenent:popup angle="450" x:Name="texttop" Foreground="#E0FFFF"/>
+                    </Grid>
+                </Popup>
+
+                <!--add the popupBottom user control-->
+
+                <Popup x:Name="popup_bottom"
+               AllowsTransparency="True"
+               HorizontalOffset="-130"
+               VerticalOffset="-205">
+                    <Grid>
+                        <compoenent:popup angle="270" x:Name="textbottom" Foreground="#E0FFFF"/>
+                    </Grid>
+                </Popup>
+                <!--add the popupRight user control-->
+
+                <Popup x:Name="popup_right"
+               AllowsTransparency="True"
+               HorizontalOffset="-285"
+               VerticalOffset="-70"
+               >
+                    <Grid>
+                        <compoenent:popup angle="180" x:Name="textright" Foreground="#E0FFFF"/>
+                    </Grid>
+                </Popup>
+                <!--add the popupLeft user control-->
+
+                <Popup x:Name="popup_left"
+               AllowsTransparency="True"
+               HorizontalOffset="5"
+               VerticalOffset="-70">
+                    <Grid>
+                        <compoenent:popup x:Name="textleft" Foreground="#E0FFFF"/>
+                    </Grid>
+                </Popup>
+
+                <!-- Vùng hiển thị thông báo -->
+                <ContentControl Grid.Row="1" 
+                                Grid.Column="1"
+                                Grid.RowSpan="9"
+                                Grid.ColumnSpan="9"
+                                x:Name="notiCenterMapArea">
+                </ContentControl>
+
+            </Grid>
+
+        </Canvas>
+
+        <Grid x:Name="Override" Grid.ColumnSpan="5" Grid.RowSpan="3" Background="Transparent"></Grid>
+        
+    </Grid>
+</UserControl>

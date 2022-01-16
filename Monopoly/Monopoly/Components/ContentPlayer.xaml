@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Monopoly.Components.ContentPlayer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.Components"
+             mc:Ignorable="d" 
+             x:Name="root"
+             d:DesignHeight="200" d:DesignWidth="150">
+    <Grid>
+        <Button Click="ChoosePlayer">
+            <Canvas>
+                <Image Height="86" Source="{Binding ImagePlayer, ElementName = root}" Stretch="UniformToFill" Canvas.Left="-46" Canvas.Top="-69"/>
+                <!--<Ellipse Width="30" Height="30" Fill="Red" Canvas.Left="-15" Canvas.Top="-50"></Ellipse>
+                <Rectangle Width="30" Height="40" Fill="Red" Canvas.Left="-15" Canvas.Top="-20"></Rectangle>-->
+
+                <TextBox Text="{Binding NamePlayer, ElementName=root}" 
+                         Canvas.Left="-13"
+                         Canvas.Top="33" 
+                         FontWeight="Bold"
+                         Background="LightGray" 
+                         IsHitTestVisible="False"/>
+
+            </Canvas>
+        </Button>
+    </Grid>
+</UserControl>

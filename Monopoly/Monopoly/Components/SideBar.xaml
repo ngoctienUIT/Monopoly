@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Monopoly.Components.SideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.Components"
+             xmlns:component="clr-namespace:Monopoly.Components"
+             x:Name="root"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="400">
+    <Grid Width="400" Height="700">
+        <Image Source="/Monopoly;component/Images/sidebar/sidebar.png"
+               Stretch="Fill" Opacity="0.8"/>
+        <Grid  Margin="13 14 13 14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Group Tab-->
+            <Grid Grid.Row="0">
+                <ContentControl x:Name="tabGroup"/>
+            </Grid>
+
+            
+            
+            <!-- Content -->
+            <Grid Grid.Row="1">
+                <ContentControl x:Name="content"/>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+    
+</UserControl>

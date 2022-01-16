@@ -1,0 +1,119 @@
+﻿<Window x:Class="Monopoly.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Monopoly"
+        xmlns:component="clr-namespace:Monopoly.Components"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Title="Monopoly" Height="780" Width="1280">
+    <Window.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5"/>
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="140,-700,140,835" To="140,67,140,67" DecelerationRatio="0.9" Duration="0:0:1"/>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="140,67,140,67" To="140,-700,140,835" DecelerationRatio="0.9" Duration="0:0:0"/>
+        </Storyboard>
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" PreviewMouseLeftButtonDown="DockPanel_PreviewMouseLeftButtonDown"
+                   HorizontalAlignment="Stretch" LastChildFill="False" VerticalAlignment="Top" Height="35">
+            <DockPanel.Background>
+                <ImageBrush ImageSource="/Monopoly;component/Images/controlbar/controlbar.jpg" Stretch="UniformToFill"></ImageBrush>
+            </DockPanel.Background>
+            <Image Margin="5 0" Source="/Monopoly;component/Images/controlbar/CuteAstronaut.png"></Image>
+            <TextBlock FontFamily="{StaticResource mainFont}" Margin="5 0" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Left" Text="King Of Galaxy" Foreground="Red" FontSize="23"></TextBlock>
+            <!--<Image Source="/Monopoly;component/Images/controlbar/Monopoly.png"></Image>-->
+
+            <Image DockPanel.Dock="Right" Source="/Monopoly;component/Images/controlbar/x.png"
+                   Cursor="Hand"                  
+                   PreviewMouseDown="Image_PreviewMouseDown_1"
+                   Margin="0 0 15 0">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Width" Value="15"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="Image.IsMouseOver" Value="True">
+                                <Setter Property="Width" Value="18"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Image DockPanel.Dock="Right" Source="/Monopoly;component/Images/controlbar/-.png" 
+                   PreviewMouseDown="Image_PreviewMouseDown"
+                   Margin="0 0 10 0" Cursor="Hand">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Width" Value="15"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="Image.IsMouseOver" Value="True">
+                                <Setter Property="Width" Value="18"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <ContentControl x:Name="view"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ContentControl Width="1000" Height="610" x:Name="endgame" Margin="140,-700,140,835"/>
+        </Grid>
+        <Grid Grid.Row="2" Name="QuitBox">
+            <Grid Background="WhiteSmoke" Opacity="0.5"></Grid>
+            <Grid Height="300" Margin="0 0 0 50"
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image Source="/Monopoly;component/Images/panel/alert-box.png"></Image>
+                <TextBlock Text="ARE YOU SURE   YOU WANT TO QUIT?"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="Red"
+                           FontSize="30"
+                           Width="300"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontFamily="{StaticResource mainFont}">
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="0 0 50 50" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+
+                    <TextBlock Text="YES" Cursor="Hand" Foreground="Red" FontFamily="{StaticResource mainFont}" MouseDown="Yes_MouseDown" Width="71">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="30"></Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="TextBlock.IsMouseOver" Value="True">
+                                        <Setter Property="FontSize" Value="33"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="/" FontSize="30" FontFamily="{StaticResource mainFont}" Foreground="#D83E1A" Width="34"/>
+                    <TextBlock Text="NO" Cursor="Hand" Foreground="WhiteSmoke" FontFamily="{StaticResource mainFont}" MouseDown="No_MouseDown">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="30"></Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="TextBlock.IsMouseOver" Value="True">
+                                        <Setter Property="FontSize" Value="33"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

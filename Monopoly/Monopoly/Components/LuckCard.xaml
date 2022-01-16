@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Monopoly.Components.LuckCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.Components"
+             x:Name="root"
+             mc:Ignorable="d" 
+             d:DesignHeight="131" d:DesignWidth="101">
+    <Grid Opacity="0.9" Width="101" Height="131">
+        <Image Source="/Monopoly;component/Images/card/card_yellow.png"
+               Stretch="Fill"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="19"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="42"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Style="{StaticResource TitleCardText}"
+                       Text="{Binding Title, ElementName=root}"/>
+
+            <Grid Margin="1 0 1 0" Grid.Row="1">
+                <Image Source="{Binding ImgSource, ElementName=root}" Stretch="UniformToFill"/>
+            </Grid>
+
+            <TextBlock Grid.Row="2"
+                       Style="{StaticResource DescriptionCardText}"
+                       Text="{Binding Description, ElementName=root}" />
+
+
+            <TextBlock Grid.Row="3"
+                       Style="{StaticResource TypeCardText}"
+                       Text="Khí vận"/>
+        </Grid>
+    </Grid>
+</UserControl>
